@@ -9,7 +9,7 @@ public interface SingletonBeanRegistry {
 
     /**
      * 获取单例Bean
-     * @param beanName
+     * @param beanName bean名称
      * @return
      */
     Object getSingleton(String beanName);

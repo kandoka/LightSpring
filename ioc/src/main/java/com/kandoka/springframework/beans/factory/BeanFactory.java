@@ -9,6 +9,12 @@ import com.kandoka.springframework.beans.BeansException;
  */
 public interface BeanFactory {
 
+    /**
+     * 获取bean
+     * @param name
+     * @return
+     * @throws BeansException
+     */
     Object getBean(String name) throws BeansException;
 
 }

@@ -5,12 +5,18 @@ import com.kandoka.springframework.beans.factory.BeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
 
 /**
- * @Description TODO
+ * @Description bean工厂，负责bean的定义、注册、获取
  * @Author handong3
  * @Date 2022/2/15 16:23
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
 
+    /**
+     * 获取Bean
+     * @param name
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object getBean(String name) throws BeansException {
         Object bean = getSingleton(name);
@@ -21,6 +27,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         BeanDefinition beanDefinition = getBeanDefinition(name);
         return createBean(name, beanDefinition);
     }
+
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
