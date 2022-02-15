@@ -17,4 +17,12 @@ public interface BeanFactory {
      */
     Object getBean(String name) throws BeansException;
 
+    /**
+     * 获取bean，用于实例化拥有构造参数的bean的场景
+     * @param name
+     * @param args bean的构造参数
+     * @return
+     * @throws BeansException
+     */
+//    Object getBean(String name, Object... args) throws BeansException;
 }
