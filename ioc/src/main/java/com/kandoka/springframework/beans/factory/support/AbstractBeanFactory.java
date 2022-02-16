@@ -12,7 +12,7 @@ import com.kandoka.springframework.beans.factory.config.BeanDefinition;
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
 
     /**
-     * 获取Bean
+     * 获取Bean，如果bean未被创建，则先创建bean
      * @param name
      * @return
      * @throws BeansException
