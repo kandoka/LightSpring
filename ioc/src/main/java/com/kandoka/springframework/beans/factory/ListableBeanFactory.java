@@ -6,5 +6,5 @@ package com.kandoka.springframework.beans.factory;
  * @Author handong3
  * @Date 2022/2/16 16:38
  */
-public class ListableBeanFactory {
+public interface ListableBeanFactory extends BeanFactory{
 }

@@ -1,6 +1,7 @@
 package com.kandoka.springframework.beans.factory.support;
 
 import com.kandoka.springframework.beans.BeansException;
+import com.kandoka.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @Author handong3
  * @Date 2022/2/15 16:27
  */
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry {
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
 
     /**
      * beanDefinition缓存
