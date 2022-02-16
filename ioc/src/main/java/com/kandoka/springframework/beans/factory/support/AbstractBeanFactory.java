@@ -27,11 +27,35 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return doGetBean(name, null);
     }
 
+    /**
+     * 获取Bean
+     * 首先尝试从bean缓存中获取bean <br>
+     * 如果缓存中找不到，说明bean未被创建，则先创建bean，<br>
+     *      创建bean时会根据对应的beanDefinition创建这个bean<br>
+     *          尝试从beanDefinition缓存中获取beanDefinition<br>
+     *      创建好bean后，将bean放入bean缓存中，以便以后获取<br>
+     * @param name
+     * @param args bean的构造参数
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
         return doGetBean(name, args);
     }
 
+    /**
+     * 获取Bean
+     * 首先尝试从bean缓存中获取bean <br>
+     * 如果缓存中找不到，说明bean未被创建，则先创建bean，<br>
+     *      创建bean时会根据对应的beanDefinition创建这个bean<br>
+     *          尝试从beanDefinition缓存中获取beanDefinition<br>
+     *      创建好bean后，将bean放入bean缓存中，以便以后获取<br>
+     * @param name
+     * @param args
+     * @param <T>
+     * @return
+     */
     protected <T> T doGetBean(final String name, final Object[] args) {
         Object bean = getSingleton(name);
         if (bean != null) {

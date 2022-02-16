@@ -1,7 +1,7 @@
 package com.kandoka.springframework.beans.factory.config;
 
 /**
- * @Description 单例缓存
+ * @Description 单例缓存 接口
  * @Author handong3
  * @Date 2022/2/15 16:20
  */

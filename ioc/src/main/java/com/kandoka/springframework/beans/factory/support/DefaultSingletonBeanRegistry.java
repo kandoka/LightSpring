@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description 负责bean单例缓存的注册、获取
+ * @Description 单例bean缓存的实现，负责bean单例缓存的注册、获取
  * @Author handong3
  * @Date 2022/2/15 16:24
  */

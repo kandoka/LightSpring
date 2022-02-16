@@ -47,6 +47,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Constructor constructor2Use = null;
         Class<?> beanClass = beanDefinition.getBeanClass();
         Constructor<?>[] declaredConstructors = beanClass.getDeclaredConstructors();
+        //找到符合的构造方法，构造参数个数一致
         for(Constructor constructor: declaredConstructors){
             if(null != args && constructor.getParameterTypes().length == args.length){
                 constructor2Use = constructor;

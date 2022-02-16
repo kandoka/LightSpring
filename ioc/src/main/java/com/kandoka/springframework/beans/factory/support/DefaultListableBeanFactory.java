@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description bean工厂，负责bean的定义、注册、获取，也可进行BeanDefinition缓存的注册、获取
+ * @Description bean工厂的实现，负责bean的定义、注册、获取，也可进行BeanDefinition缓存的注册、获取
  * @Author handong3
  * @Date 2022/2/15 16:27
  */
