@@ -11,11 +11,11 @@ public interface BeanFactory {
 
     /**
      * 获取Bean
-     * 首先尝试从bean缓存中获取bean
-     * 如果缓存中找不到，说明bean未被创建，则先创建bean，
-     *      创建bean时会根据对应的beanDefinition创建这个bean
-     *          尝试从beanDefinition缓存中获取beanDefinition
-     *      创建好bean后，将bean放入bean缓存中，以便以后获取
+     * 首先尝试从bean缓存中获取bean <br>
+     * 如果缓存中找不到，说明bean未被创建，则先创建bean，<br>
+     *      创建bean时会根据对应的beanDefinition创建这个bean<br>
+     *          尝试从beanDefinition缓存中获取beanDefinition<br>
+     *      创建好bean后，将bean放入bean缓存中，以便以后获取<br>
      * @param name
      * @return
      * @throws BeansException
@@ -29,5 +29,5 @@ public interface BeanFactory {
      * @return
      * @throws BeansException
      */
-//    Object getBean(String name, Object... args) throws BeansException;
+    Object getBean(String name, Object... args) throws BeansException;
 }

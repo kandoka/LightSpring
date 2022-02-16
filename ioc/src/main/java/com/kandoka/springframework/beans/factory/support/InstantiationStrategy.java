@@ -20,5 +20,8 @@ public interface InstantiationStrategy {
      * @return
      * @throws BeansException
      */
-    Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) throws BeansException;
+    Object instantiate(BeanDefinition beanDefinition,
+                       String beanName,
+                       Constructor constructor,
+                       Object[] args) throws BeansException;
 }
