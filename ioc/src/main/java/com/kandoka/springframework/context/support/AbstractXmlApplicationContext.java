@@ -11,7 +11,7 @@ import com.kandoka.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 public abstract class AbstractXmlApplicationContext extends AbstractRefreshableApplicationContext {
 
     /**
-     * 加载xml文件配置信息，存入缓存中
+     * 加载xml文件内的beanDefinition配置信息，存入beanFactory的beanDefinition缓存中
      * @param beanFactory
      */
     @Override

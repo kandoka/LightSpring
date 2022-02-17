@@ -22,6 +22,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
      * 但此时资源加载还只是定义了一个抽象类方法
      * loadBeanDefinitions(DefaultListableBeanFactory
      * beanFactory)，继续由其他抽象类继承实现。
+     * 最终刷新加载了携带着beanDefinition缓存的bean工厂
      * @throws BeansException
      */
     @Override
@@ -31,6 +32,10 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
         this.beanFactory = beanFactory;
     }
 
+    /**
+     * 获取实例化的bean工厂
+     * @return
+     */
     private DefaultListableBeanFactory createBeanFactory() {
         return new DefaultListableBeanFactory();
     }

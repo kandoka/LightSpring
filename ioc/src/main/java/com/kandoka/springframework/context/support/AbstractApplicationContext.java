@@ -15,6 +15,11 @@ import java.util.Map;
  * @Date 2022/2/17 15:31
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
+
+    /**
+     * 刷新应用上下文，处理创建获取bean工厂、加载beanDefinition、执行自定义的bean实例化前后处理方法
+     * @throws BeansException
+     */
     @Override
     public void refresh() throws BeansException {
         // 1. 创建 BeanFactory，并加载 BeanDefinition
@@ -35,6 +40,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     protected abstract ConfigurableListableBeanFactory getBeanFactory();
 
+    /**
+     * 在所有的 BeanDefinition 加载完成后，实例化 Bean 对象之前，执行修
+     * 改 BeanDefinition 属性的机制
+     * @param beanFactory
+     * @throws BeansException
+     */
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
         //获取bean工厂的所有后置处理器
         Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap =
@@ -44,6 +55,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         }
     }
 
+    /**
+     * 注册bean处理器，实例化这些处理器为bean
+     * @param beanFactory
+     */
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
         Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
         for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
