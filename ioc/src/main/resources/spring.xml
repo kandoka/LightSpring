@@ -7,5 +7,6 @@
         <property name="uId" value="10001"/>
         <property name="userDao" ref="userDao"/>
     </bean>
-
+    <bean class="com.kandoka.springframework.test.common.MyBeanPostProcessor"/>
+    <bean class="com.kandoka.springframework.test.common.MyBeanFactoryPostProcessor"/>
 </beans>
