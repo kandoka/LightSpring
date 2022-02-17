@@ -3,6 +3,7 @@ package com.kandoka.springframework.beans.factory;
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
+import com.kandoka.springframework.beans.factory.config.BeanPostProcessor;
 import com.kandoka.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
@@ -14,4 +15,7 @@ public interface ConfigurableListableBeanFactory extends ListableBeanFactory, Au
 
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
+    void preInstantiateSingletons() throws BeansException;
+
+    void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 }
