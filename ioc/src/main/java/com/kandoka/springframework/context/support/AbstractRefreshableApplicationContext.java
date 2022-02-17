@@ -5,7 +5,7 @@ import com.kandoka.springframework.beans.factory.ConfigurableListableBeanFactory
 import com.kandoka.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 /**
- * @Description TODO
+ * @Description 应用上下文的抽象类。实现了获取实例化的DefaultListableBeanFactory
  * @Author handong3
  * @Date 2022/2/17 15:32
  */

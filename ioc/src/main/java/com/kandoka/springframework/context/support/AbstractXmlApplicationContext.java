@@ -4,14 +4,14 @@ import com.kandoka.springframework.beans.factory.support.DefaultListableBeanFact
 import com.kandoka.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 /**
- * @Description TODO
+ * @Description 应用上下文的抽象类。实现了加载xml资源文件
  * @Author handong3
  * @Date 2022/2/17 15:32
  */
 public abstract class AbstractXmlApplicationContext extends AbstractRefreshableApplicationContext {
 
     /**
-     * 加载xml文件配置信息
+     * 加载xml文件配置信息，存入缓存中
      * @param beanFactory
      */
     @Override
