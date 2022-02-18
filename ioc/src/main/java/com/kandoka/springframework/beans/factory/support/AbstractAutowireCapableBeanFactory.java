@@ -12,7 +12,10 @@ import com.kandoka.springframework.beans.factory.config.BeanReference;
 import java.lang.reflect.Constructor;
 
 /**
- * @Description TODO
+ * @Description bean工厂抽象类，主要实现了：
+ *              1、根据bean定义实例化bean的createBean方法
+ *              2、给bean填充属性方法
+ *              3、调用初始化前置后置方法
  * @Author handong3
  * @Date 2022/2/15 16:27
  */
@@ -50,7 +53,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     /**
-     * bean属性填充
+     * bean属性填充 TODO 处理循环依赖
      * @param beanName
      * @param bean
      * @param beanDefinition
@@ -63,13 +66,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
 
-                // 如果A 依赖 B，获取 B 的实例化，可以处理递归依赖
+                // 如果A 依赖 B，获取 B 的实例化，可以处理递归依赖 A->B->C...
                 if(value instanceof BeanReference){
                     BeanReference beanReference = (BeanReference) value;
                     value = getBean(beanReference.getBeanName());
                 }
 
-                //进行属性填充，借用hutool工具类的属性填充方法，也可以自己实现
+                //进行属性填充，借用hutool工具类的属性填充方法，也可以自己通过反射机制实现
                 BeanUtil.setFieldValue(bean, name, value);
             }
         } catch (Exception e) {
