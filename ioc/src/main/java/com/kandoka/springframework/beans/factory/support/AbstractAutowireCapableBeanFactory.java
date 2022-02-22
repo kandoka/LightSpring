@@ -1,15 +1,18 @@
 package com.kandoka.springframework.beans.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.PropertyValue;
 import com.kandoka.springframework.beans.PropertyValues;
+import com.kandoka.springframework.beans.factory.InitializingBean;
 import com.kandoka.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
 import com.kandoka.springframework.beans.factory.config.BeanPostProcessor;
 import com.kandoka.springframework.beans.factory.config.BeanReference;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 /**
  * @Description bean工厂抽象类，主要实现了：
@@ -124,7 +127,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      * @return
      */
-    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
@@ -139,10 +142,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     /**
      * 执行bean的初始化方法 TODO
      * @param beanName
-     * @param wrappedBean
+     * @param bean
      * @param beanDefinition
      */
-    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+    private void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+        //1.调用实现了接口InitializingBean的afterPropertySet方法
+        if(bean instanceof InitializingBean) {
+            ((InitializingBean) bean).afterPropertySet();
+        }
+
+        //2.配置信息init-method
+        String initMethodName = beanDefinition.getInitMethodName();
+        if(StrUtil.isNotEmpty(initMethodName)){
+            Method initMethod = beanDefinition.getBeanClass().getMethod(initMethodName);
+            if(null == initMethod){
+                throw new BeansException("Could not find an init method named'" +
+                        initMethodName + "' on bean with name'" + beanName + "'");
+            }
+            initMethod.invoke(bean);
+        }
     }
 
     /**
