@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.PropertyValue;
 import com.kandoka.springframework.beans.PropertyValues;
+import com.kandoka.springframework.beans.factory.DisposableBean;
 import com.kandoka.springframework.beans.factory.InitializingBean;
 import com.kandoka.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
@@ -50,9 +51,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             throw new BeansException("Instantiation of bean failed", e);
         }
 
+        registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+
         //添加创建好的bean到bean缓存中
         addSingleton(beanName, bean);
         return bean;
+    }
+
+    protected void registerDisposableBeanIfNecessary(String beanName, Object bean,
+                                                     BeanDefinition beanDefinition) {
+        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+        }
     }
 
     /**
@@ -148,7 +158,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     private void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
         //1.调用实现了接口InitializingBean的afterPropertySet方法
         if(bean instanceof InitializingBean) {
-            ((InitializingBean) bean).afterPropertySet();
+            ((InitializingBean) bean).afterPropertiesSet();
         }
 
         //2.配置信息init-method
