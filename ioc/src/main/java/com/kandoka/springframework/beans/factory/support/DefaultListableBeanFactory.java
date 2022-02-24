@@ -26,6 +26,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
      */
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
+        System.out.println("DefaultListableBeanFactory.registerBeanDefinition() 执行");
         beanDefinitionMap.put(beanName, beanDefinition);
     }
 
@@ -72,6 +73,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
      */
     @Override
     public void preInstantiateSingletons() throws BeansException {
+        System.out.println("DefaultListableBeanFactory.preInstantiateSingletons() 执行");
         beanDefinitionMap.keySet().forEach(this::getBean);
     }
 }

@@ -101,6 +101,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void close() {
+        System.out.println("AbstractApplicationContext.close() 开始");
         getBeanFactory().destroySingletons();
+        System.out.println("AbstractApplicationContext.close() 完成");
     }
 }

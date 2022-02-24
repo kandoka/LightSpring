@@ -15,6 +15,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 
     @Override
     public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) throws BeansException {
+        System.out.println("["+beanName+"] SimpleInstantiationStrategy.instantiate() 执行");
         Class clazz = beanDefinition.getBeanClass();
         try{
             //如果constructor不为空，就是需要有构造函数的实例化

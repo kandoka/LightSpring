@@ -35,6 +35,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBean() 开始");
         Object bean;
         try {
             //根据beanDefinition创建一个bean
@@ -56,6 +57,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         if(beanDefinition.isSingleton()) {
             addSingleton(beanName, bean);
         }
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBean() 完成");
         return bean;
     }
 
@@ -67,12 +69,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean,
                                                      BeanDefinition beanDefinition) {
+        System.out.println("[" + beanName + "] AbstractAutowir" +
+                "eCapableBeanFactory.registerDisposableBeanIfNecessary() 开始");
         if(!beanDefinition.isSingleton()){
             return;
         }
         if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
             registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
         }
+        System.out.println("[" + beanName + "] AbstractAutowir" +
+                "eCapableBeanFactory.registerDisposableBeanIfNecessary() 结束");
     }
 
     /**
@@ -82,6 +88,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      */
     protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition){
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.applyPropertyValues() 开始");
         try {
             //循环bean的所有属性，进行属性填充操作
             PropertyValues propertyValues = beanDefinition.getPropertyValues();
@@ -101,6 +108,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         } catch (Exception e) {
             throw new BeansException("Error setting property values：" + beanName);
         }
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.applyPropertyValues() 完成");
     }
 
     /**
@@ -111,6 +119,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @return
      */
     protected Object createBeanInstance(BeanDefinition beanDefinition, String beanName, Object[] args){
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBeanInstance() 开始");
         Constructor constructor2Use = null;
         Class<?> beanClass = beanDefinition.getBeanClass();
         Constructor<?>[] declaredConstructors = beanClass.getDeclaredConstructors();
@@ -121,6 +130,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 break;
             }
         }
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBeanInstance() 完成");
         return  getInstantiationStrategy().instantiate(beanDefinition, beanName, constructor2Use, args);
     }
 
@@ -148,6 +158,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @return
      */
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.initializeBean() 开始");
         //处理实现感知的bean
         if(bean instanceof Aware){
             //让bean获取BeanFactory实例
@@ -177,6 +188,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         // 2. 执行 BeanPostProcessor After 处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.initializeBean() 完成");
         return wrappedBean;
     }
 
@@ -187,6 +199,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      */
     private void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.invokeInitMethods() 执行");
         //1.调用实现了接口InitializingBean的afterPropertySet方法
         if(bean instanceof InitializingBean) {
             ((InitializingBean) bean).afterPropertiesSet();
@@ -214,12 +227,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     @Override
     public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean,
                                                               String beanName) throws BeansException {
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization() 开始");
         Object result = existingBean;
         for (BeanPostProcessor processor : getBeanPostProcessors()) {
             Object current = processor.postProcessBeforeInitialization(result, beanName);
             if (null == current) return result;
             result = current;
         }
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization() 完成");
         return result;
     }
 
@@ -232,12 +247,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     @Override
     public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException {
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsAfterInitialization() 开始");
         Object result = existingBean;
         for (BeanPostProcessor processor : getBeanPostProcessors()) {
             Object current = processor.postProcessAfterInitialization(result, beanName);
             if (null == current) return result;
             result = current;
         }
+        System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsAfterInitialization() 完成");
         return result;
     }
 }

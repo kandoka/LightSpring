@@ -7,6 +7,7 @@ import com.kandoka.springframework.beans.factory.config.SingletonBeanRegistry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @Description 单例bean缓存的实现，负责bean单例缓存的注册、获取
@@ -48,6 +49,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     }
 
     public void destroySingletons() {
+        System.out.println("DefaultSingletonBeanRegistry.destroySingletons() 开始");
         Set<String> keySet = this.disposableBeans.keySet();
         Object[] disposableBeanNames = keySet.toArray();
 
@@ -60,5 +62,6 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 throw new BeansException("Destroy method on bean with name '" + beanName + "' threw an exception", e);
             }
         }
+        System.out.println("DefaultSingletonBeanRegistry.destroySingletons() 完成");
     }
 }
