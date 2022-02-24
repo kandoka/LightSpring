@@ -5,8 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.PropertyValue;
 import com.kandoka.springframework.beans.PropertyValues;
-import com.kandoka.springframework.beans.factory.DisposableBean;
-import com.kandoka.springframework.beans.factory.InitializingBean;
+import com.kandoka.springframework.beans.factory.*;
 import com.kandoka.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
 import com.kandoka.springframework.beans.factory.config.BeanPostProcessor;
@@ -138,11 +137,32 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @return
      */
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+        //处理实现感知的bean
+        if(bean instanceof Aware){
+            //让bean获取BeanFactory实例
+            if(bean instanceof BeanFactoryAware){
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            //让bean获取BeanClassLoader实例
+            if(bean instanceof BeanFactoryAware){
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+            }
+            //让bean获取Bean名字
+            if(bean instanceof BeanNameAware){
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+        }
+
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
         // 待完成内容：invokeInitMethods(beanName, wrappedBean, beanDefinition);
-        invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        try {
+            invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        } catch (Exception e) {
+         throw new BeansException("Invocation of init method of bean[\" + beanNam\n" +
+                 "e + \"] failed", e);
+        }
 
         // 2. 执行 BeanPostProcessor After 处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
