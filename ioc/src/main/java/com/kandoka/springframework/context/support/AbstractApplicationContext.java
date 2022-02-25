@@ -22,6 +22,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      */
     @Override
     public void refresh() throws BeansException {
+        System.out.println("AbstractApplicationContext.refresh() 开始");
         // 1. 创建 BeanFactory，并加载 BeanDefinition
         refreshBeanFactory();
         // 2. 获取 BeanFactory
@@ -37,6 +38,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         registerBeanPostProcessors(beanFactory);
         // 6. 提前实例化单例 Bean 对象
         beanFactory.preInstantiateSingletons();
+        System.out.println("AbstractApplicationContext.refresh() 完成");
     }
 
     protected abstract void refreshBeanFactory() throws BeansException;
@@ -50,12 +52,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      * @throws BeansException
      */
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        System.out.println("AbstractApplicationContext.invokeBeanFactoryPostProcessors() 开始");
         //获取bean工厂的所有后置处理器
         Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap =
                 beanFactory.getBeansOfType(BeanFactoryPostProcessor.class);
         for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessorMap.values()) {
             beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
         }
+        System.out.println("AbstractApplicationContext.invokeBeanFactoryPostProcessors() 完成");
     }
 
     /**
@@ -63,10 +67,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      * @param beanFactory
      */
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        System.out.println("AbstractApplicationContext.registerBeanPostProcessors() 开始");
         Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
         for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
             beanFactory.addBeanPostProcessor(beanPostProcessor);
         }
+        System.out.println("AbstractApplicationContext.registerBeanPostProcessors() 完成");
     }
 
     @Override
