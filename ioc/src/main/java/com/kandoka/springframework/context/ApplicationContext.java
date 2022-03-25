@@ -1,6 +1,8 @@
 package com.kandoka.springframework.context;
 
+import com.kandoka.springframework.beans.factory.HierarchicalBeanFactory;
 import com.kandoka.springframework.beans.factory.ListableBeanFactory;
+import com.kandoka.springframework.core.io.ResourceLoader;
 
 /**
  * @Description context 是本次实现应用上下文功能新增的服务包
@@ -11,5 +13,5 @@ import com.kandoka.springframework.beans.factory.ListableBeanFactory;
  * @Author handong3
  * @Date 2022/2/17 15:27
  */
-public interface ApplicationContext extends ListableBeanFactory {
+public interface ApplicationContext extends ListableBeanFactory, HierarchicalBeanFactory, ResourceLoader, ApplicationEventPublisher {
 }

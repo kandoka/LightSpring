@@ -15,7 +15,9 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /**
- * @Description TODO
+ * @Description 事件广播的抽象类，
+ * 实现了一些通用方法，例如新增/删除/获取监听器、判断事件是否监听器感兴趣的事件等
+ * 留下事件的广播方法，供其它实现类来实现
  * @Author handong3
  * @Date 2022/3/25 15:10
  */

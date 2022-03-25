@@ -64,4 +64,13 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         }
         System.out.println("DefaultSingletonBeanRegistry.destroySingletons() 完成");
     }
+
+    /**
+     * 注册单例
+     * @param beanName
+     * @param singletonObject
+     */
+    public void registerSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName, singletonObject);
+    }
 }

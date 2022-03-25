@@ -14,4 +14,7 @@
     </bean>
     <bean class="com.kandoka.springframework.test.common.MyBeanPostProcessor"/>
     <bean class="com.kandoka.springframework.test.common.MyBeanFactoryPostProcessor"/>
+    <bean class="com.kandoka.springframework.test.event.ContextRefreshedEventListener"/>
+    <bean class="com.kandoka.springframework.test.event.ContextClosedEventListener"/>
+    <bean class="com.kandoka.springframework.test.event.CustomEventListener"/>
 </beans>
