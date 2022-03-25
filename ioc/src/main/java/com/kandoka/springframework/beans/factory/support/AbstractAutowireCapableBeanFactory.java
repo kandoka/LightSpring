@@ -159,7 +159,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      */
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
         System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.initializeBean() 开始");
-        //处理实现感知的bean
+        //处理实现感知的bean，将对应的资源放入bean实例中
         if(bean instanceof Aware){
             //让bean获取BeanFactory实例
             if(bean instanceof BeanFactoryAware){
