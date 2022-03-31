@@ -51,7 +51,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         beanFactory.preInstantiateSingletons();
         //7. 初始化事件发布者
         initApplicationEventMulticaster();
-        //7. 注册事件监听器
+        //8. 注册事件监听器
         registerListeners();
         //9. 发布容器刷新完成事件
         finishRefresh();
