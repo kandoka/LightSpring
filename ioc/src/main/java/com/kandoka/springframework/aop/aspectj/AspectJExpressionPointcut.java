@@ -1,4 +1,4 @@
-package com.kandoka.springframework.aspectj;
+package com.kandoka.springframework.aop.aspectj;
 
 import com.kandoka.springframework.aop.ClassFilter;
 import com.kandoka.springframework.aop.MethodMatcher;
