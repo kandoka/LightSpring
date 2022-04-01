@@ -166,7 +166,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 ((BeanFactoryAware) bean).setBeanFactory(this);
             }
             //让bean获取BeanClassLoader实例
-            if(bean instanceof BeanFactoryAware){
+            if(bean instanceof BeanClassLoaderAware){
                 ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
             }
             //让bean获取Bean名字
