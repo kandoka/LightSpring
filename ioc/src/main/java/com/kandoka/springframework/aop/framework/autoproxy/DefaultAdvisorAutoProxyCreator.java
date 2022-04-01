@@ -1,8 +1,6 @@
 package com.kandoka.springframework.aop.framework.autoproxy;
 
-import com.kandoka.springframework.aop.AdvisedSupport;
-import com.kandoka.springframework.aop.ClassFilter;
-import com.kandoka.springframework.aop.TargetSource;
+import com.kandoka.springframework.aop.*;
 import com.kandoka.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import com.kandoka.springframework.aop.framework.ProxyFactory;
 import com.kandoka.springframework.beans.BeansException;
@@ -10,6 +8,7 @@ import com.kandoka.springframework.beans.factory.BeanFactory;
 import com.kandoka.springframework.beans.factory.BeanFactoryAware;
 import com.kandoka.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import com.kandoka.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -69,16 +68,18 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
     }
 
     private boolean isInfrastructureClass(Class<?> beanClass) {
-        return false;
+        return Advice.class.isAssignableFrom(beanClass)
+                || Pointcut.class.isAssignableFrom(beanClass)
+                || Advisor.class.isAssignableFrom(beanClass);
     }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return null;
+        return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return null;
+        return bean;
     }
 }

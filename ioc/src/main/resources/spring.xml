@@ -5,7 +5,7 @@
           initmethod="initDataMethod" destroy-method="destroyDataMethod"/>
     <bean id="proxyUserDao" class="com.kandoka.springframework.test.bean.ProxyBeanFactory"/>
 
-    <bean id="userService" class="com.kandoka.springframework.test.bean.UserService" scope="prototype">
+    <bean id="userService" class="com.kandoka.springframework.test.bean.UserService" scope="singleton">
         <property name="uId" value="10001"/>
         <property name="company" value="腾讯"/>
         <property name="location" value="深圳"/>
@@ -19,12 +19,13 @@
     <bean class="com.kandoka.springframework.test.event.ContextClosedEventListener"/>
     <bean class="com.kandoka.springframework.test.event.CustomEventListener"/>
     <!-- aop -->
+<!--    <bean id="userService" class="com.kandoka.springframework.test.bean.UserService"/>-->
     <bean class="com.kandoka.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     <bean id="beforeAdvice" class="com.kandoka.springframework.test.aop.UserServiceBeforeAdvice"/>
     <bean id="methodInterceptor" class="com.kandoka.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="beforeAdvice"/>
     </bean>
-    <bean id="pointcutAdvice" class="com.kandoka.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <bean id="pointcutAdvisor" class="com.kandoka.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
         <property name="expression" value="execution(* com.kandoka.springframework.test.bean.IUserService.*(..))"/>
         <property name="advice" ref="methodInterceptor"/>
     </bean>

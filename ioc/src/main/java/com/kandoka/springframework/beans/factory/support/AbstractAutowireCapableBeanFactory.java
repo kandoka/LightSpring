@@ -6,10 +6,7 @@ import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.PropertyValue;
 import com.kandoka.springframework.beans.PropertyValues;
 import com.kandoka.springframework.beans.factory.*;
-import com.kandoka.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import com.kandoka.springframework.beans.factory.config.BeanDefinition;
-import com.kandoka.springframework.beans.factory.config.BeanPostProcessor;
-import com.kandoka.springframework.beans.factory.config.BeanReference;
+import com.kandoka.springframework.beans.factory.config.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -37,7 +34,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBean() 开始");
         Object bean;
-        try {
+        try {            // 判断是否返回代理 Bean 对象
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (null != bean) {
+                return bean;
+            }
+            
             //根据beanDefinition创建一个bean
             bean = createBeanInstance(beanDefinition, beanName, args);
 
@@ -59,6 +61,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBean() 完成");
         return bean;
+    }
+
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition){
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class beanClass, String beanName){
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor)
+                        .postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) return result;
+            }
+        }
+        return null;
     }
 
     /**
