@@ -5,7 +5,7 @@ import com.kandoka.springframework.beans.factory.BeanFactory;
 import com.kandoka.springframework.beans.factory.BeanFactoryAware;
 import com.kandoka.springframework.context.ApplicationEvent;
 import com.kandoka.springframework.context.ApplicationListener;
-import com.kandoka.springframework.utils.ClassUtils;
+import com.kandoka.springframework.util.ClassUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

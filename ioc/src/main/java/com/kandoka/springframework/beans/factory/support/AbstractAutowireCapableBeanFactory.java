@@ -34,7 +34,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBean() 开始");
         Object bean;
-        try {            // 判断是否返回代理 Bean 对象
+        try {
+            // 判断是否返回代理 Bean 对象
             bean = resolveBeforeInstantiation(beanName, beanDefinition);
             if (null != bean) {
                 return bean;
@@ -42,6 +43,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             
             //根据beanDefinition创建一个bean
             bean = createBeanInstance(beanDefinition, beanName, args);
+
+            //在设置Bean属性之前，允许BeanPostProcessor修改属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
 
             //给bean填充属性
             applyPropertyValues(beanName, bean, beanDefinition);
@@ -61,6 +65,31 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         System.out.println("[" + beanName + "] AbstractAutowireCapableBeanFactory.createBean() 完成");
         return bean;
+    }
+
+    /**
+     * 就是在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
+     *
+     * 首先就是获取已经注入的 BeanPostProcessor 集合并从中筛选出继承接口
+     * InstantiationAwareBeanPostProcessor的实现类
+     *
+     * 最后就是调用相应的 postProcessPropertyValues 方法以及循环设置属性值信息，
+     * @param beanName
+     * @param bean
+     * @param beanDefinition
+     */
+    protected void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for(BeanPostProcessor beanPostProcessor: getBeanPostProcessors()){
+            if(beanPostProcessor instanceof InstantiationAwareBeanPostProcessor){
+                PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) beanPostProcessor)
+                        .postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                if(null != pvs){
+                    for(PropertyValue propertyValue: pvs.getPropertyValues()){
+                        beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+                    }
+                }
+            }
+        }
     }
 
     protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition){

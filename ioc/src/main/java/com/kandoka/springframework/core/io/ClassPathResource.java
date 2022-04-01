@@ -1,7 +1,7 @@
 package com.kandoka.springframework.core.io;
 
 import cn.hutool.core.lang.Assert;
-import com.kandoka.springframework.utils.ClassUtils;
+import com.kandoka.springframework.util.ClassUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
