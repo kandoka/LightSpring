@@ -1,5 +1,7 @@
 package com.kandoka.springframework.aop;
 
+import com.kandoka.springframework.util.ClassUtils;
+
 /**
  * @Description 被代理类的封装类
  * @Author handong3
@@ -18,7 +20,12 @@ public class TargetSource {
      * @return the type of targets returned by this {@link TargetSource}
      */
     public Class<?>[] getTargetClass(){
-        return this.target.getClass().getInterfaces();
+        Class<?> clazz = this.target.getClass();
+        //在 TargetSource#getTargetClass 是用于获取 target 对象的接口信息的，那么这
+        //个 target 可能是 JDK 代理 创建也可能是 CGlib 创建，为了保证都能正确的
+        //获取到结果，这里需要增加判读
+        clazz = ClassUtils.isCglibProxyClass(clazz) ? clazz.getSuperclass() : clazz;
+        return clazz.getInterfaces();
     }
 
     /**
