@@ -1,7 +1,7 @@
 package com.kandoka.springframework.aop;
 
 /**
- * @Description TODO
+ * @Description 被代理类的封装类
  * @Author handong3
  * @Date 2022/3/31 16:38
  */

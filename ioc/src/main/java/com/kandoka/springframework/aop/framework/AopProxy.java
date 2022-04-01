@@ -6,5 +6,9 @@ package com.kandoka.springframework.aop.framework;
  * @Date 2022/3/31 17:01
  */
 public interface AopProxy {
+    /**
+     * 获取代理对象
+     * @return
+     */
     Object getProxy();
 }

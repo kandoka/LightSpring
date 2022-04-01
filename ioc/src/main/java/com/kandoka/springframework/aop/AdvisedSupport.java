@@ -6,6 +6,7 @@ import org.aopalliance.intercept.MethodInterceptor;
  * @Description 包装切面通知信息类
  *              主要用于吧代理、拦截、匹配的各项属性包装导一个类中，方便在Proxy
  *              类中使用
+ *              类似于网络请求中将接口的多个参数封装到Json中
  * @Author handong3
  * @Date 2022/3/31 16:36
  */
