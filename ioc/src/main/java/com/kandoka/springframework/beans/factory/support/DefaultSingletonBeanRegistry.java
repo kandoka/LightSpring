@@ -2,12 +2,14 @@ package com.kandoka.springframework.beans.factory.support;
 
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.DisposableBean;
+import com.kandoka.springframework.beans.factory.ObjectFactory;
 import com.kandoka.springframework.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Description 单例bean缓存的实现，负责bean单例缓存的注册、获取
@@ -16,14 +18,24 @@ import java.util.logging.Logger;
  */
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
-    protected static final Object NULL_OBJECT = new Object();
-
-    private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
+    /**
+     * 一级缓存，普通实例化完成后的对象
+     */
+    private Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
     /**
-     * bean缓存，单例模式
+     * 二级缓存，提前暴漏对象，没有完全实例化的对象
      */
-    private final Map<String, Object> singletonObjects = new HashMap<>();
+    protected final Map<String, Object> earlySingletonObjects = new HashMap<>();
+
+    /**
+     * 三级缓存，存放代理对象
+     */
+    private final Map<String, ObjectFactory<?>> singletonObjectFactories = new HashMap<>();
+
+    protected static final Object NULL_OBJECT = new Object();
+
+    private final Map<String, DisposableBean> disposableBeans = new LinkedHashMap<>();
 
     /**
      * 从bean缓存获取bean
@@ -32,20 +44,31 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
      */
     @Override
     public Object getSingleton(String beanName) {
-        return singletonObjects.get(beanName);
-    }
-
-    /**
-     * 添加bean到bean缓存中
-     * @param beanName
-     * @param singletonObject
-     */
-    protected void addSingleton(String beanName, Object singletonObject) {
-        singletonObjects.put(beanName, singletonObject);
-    }
-
-    public void registerDisposableBean(String beanName, DisposableBean bean) {
-        disposableBeans.put(beanName, bean);
+        Object singletonObject = singletonObjects.get(beanName);
+        //判断一级缓存中是否有对象
+        if(null == singletonObject){
+            System.out.println("从一级缓存未获取到"+beanName+"，尝试从二级缓存获取的半成品对象");
+            singletonObject = earlySingletonObjects.get(beanName);
+            //判断二级缓存中是否有对象。没有的话，这个对象就是代理对象，因为只有代理对象才会放到三级缓存中
+            if(null == singletonObject){
+                System.out.println("从二级缓存未获取到"+beanName+"，尝试从三级缓存的代理对象");
+                ObjectFactory<?> singletonFactory = singletonObjectFactories.get(beanName);
+                if(null != singletonFactory){
+                    System.out.println("从三级级缓存获取到"+beanName+"的代理对象，放入到二级缓存中");
+                    singletonObject = singletonFactory.getObject();
+                    //把三级缓存中的代理对象中的真实对象获取出来，放入到二级缓存中
+                    earlySingletonObjects.put(beanName, singletonObject);
+                    singletonObjectFactories.remove(beanName);
+                } else {
+                    System.out.println("从三级级缓存未获取"+beanName+"的代理对象");
+                }
+            } else {
+                System.out.println("从二级级缓存获取到"+beanName+"的半成品对象");
+            }
+        } else {
+            System.out.println("从一级缓存获取到"+beanName+"的实例对象");
+        }
+        return singletonObject;
     }
 
     public void destroySingletons() {
@@ -72,5 +95,20 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
      */
     public void registerSingleton(String beanName, Object singletonObject) {
         singletonObjects.put(beanName, singletonObject);
+        earlySingletonObjects.remove(beanName);
+        singletonObjectFactories.remove(beanName);
     }
+
+    protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
+        if(!this.singletonObjects.containsKey(beanName)){
+            this.singletonObjectFactories.put(beanName, singletonFactory);
+            this.earlySingletonObjects.remove(beanName);
+        }
+    }
+
+
+    public void registerDisposableBean(String beanName, DisposableBean bean) {
+        disposableBeans.put(beanName, bean);
+    }
+
 }
