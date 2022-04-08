@@ -90,7 +90,9 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             advisedSupport.setProxyTargetClass(true);
 
             // 返回代理对象
-            return new ProxyFactory(advisedSupport).getProxy();
+            Object rtn =  new ProxyFactory(advisedSupport).getProxy();
+            System.out.println("["+bean.getClass()+"]DefaultAdvisorAutoProxyCreator#wrapIfNecessary 返回代理对象："+rtn.getClass());
+            return rtn;
         }
 
         return bean;

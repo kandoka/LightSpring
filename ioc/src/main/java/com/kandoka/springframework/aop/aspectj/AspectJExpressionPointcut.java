@@ -33,11 +33,13 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
 
     @Override
     public boolean matches(Class<?> clazz) {
+        System.out.println("["+clazz+"]AspectJExpressionPointcut#matches() 执行匹配类");
         return pointcutExpression.couldMatchJoinPointsInType(clazz);
     }
 
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
+        System.out.println("["+targetClass+"]AspectJExpressionPointcut#matches() 执行匹配方法：" + method.getName());
         return pointcutExpression.matchesMethodExecution(method).alwaysMatches();
     }
 
