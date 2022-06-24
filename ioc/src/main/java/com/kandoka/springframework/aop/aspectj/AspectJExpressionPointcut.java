@@ -3,6 +3,7 @@ package com.kandoka.springframework.aop.aspectj;
 import com.kandoka.springframework.aop.ClassFilter;
 import com.kandoka.springframework.aop.MethodMatcher;
 import com.kandoka.springframework.aop.Pointcut;
+import com.kandoka.springframework.util.LogUtil;
 import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.PointcutParser;
 import org.aspectj.weaver.tools.PointcutPrimitive;
@@ -31,15 +32,26 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
         pointcutExpression = pointcutParser.parsePointcutExpression(expression);
     }
 
+    /**
+     * 对类进行匹配
+     * @param clazz
+     * @return
+     */
     @Override
     public boolean matches(Class<?> clazz) {
-        System.out.println("["+clazz+"]AspectJExpressionPointcut#matches() 执行匹配类");
+        LogUtil.info("[{}]AspectJExpressionPointcut#matches() 执行匹配类", clazz);
         return pointcutExpression.couldMatchJoinPointsInType(clazz);
     }
 
+    /**
+     * 对类中改的方法进行匹配
+     * @param method
+     * @param targetClass
+     * @return
+     */
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
-        System.out.println("["+targetClass+"]AspectJExpressionPointcut#matches() 执行匹配方法：" + method.getName());
+        LogUtil.info("[{}]AspectJExpressionPointcut#matches() 执行匹配方法：{}", targetClass, method.getName());
         return pointcutExpression.matchesMethodExecution(method).alwaysMatches();
     }
 

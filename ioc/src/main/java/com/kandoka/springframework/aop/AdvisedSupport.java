@@ -12,8 +12,17 @@ import org.aopalliance.intercept.MethodInterceptor;
  */
 public class AdvisedSupport {
     private boolean proxyTargetClass = false;
+    /**
+     * 被代理的类的上层封装
+     */
     private TargetSource targetSource;
+    /**
+     * 被代理的类中方法的拦截器
+     */
     private MethodInterceptor methodInterceptor;
+    /**
+     * 方法匹配器
+     */
     private MethodMatcher methodMatcher;
 
     public boolean isProxyTargetClass() {

@@ -1,6 +1,7 @@
 package com.kandoka.springframework.aop.framework.adapter;
 
 import com.kandoka.springframework.aop.MethodBeforeAdvice;
+import com.kandoka.springframework.util.LogUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -22,9 +23,11 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-        System.out.println("MethodBeforeAdviceInterceptor#invoke() 执行方法："+methodInvocation.getMethod().getName());
+        LogUtil.info("MethodBeforeAdviceInterceptor#invoke() 执行方法：{}", methodInvocation.getMethod().getName());
+        //执行前置方法，用于在被拦截的方法执行前，做些别的处理
         this.advice.before(methodInvocation.getMethod(), methodInvocation.getArguments(),
                 methodInvocation.getThis());
+        //执行被拦截的方法
         return methodInvocation.proceed();
     }
 

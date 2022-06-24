@@ -9,6 +9,7 @@ import com.kandoka.springframework.beans.factory.BeanFactory;
 import com.kandoka.springframework.beans.factory.BeanFactoryAware;
 import com.kandoka.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import com.kandoka.springframework.beans.factory.support.DefaultListableBeanFactory;
+import com.kandoka.springframework.util.LogUtil;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -79,7 +80,9 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
         for (AspectJExpressionPointcutAdvisor advisor : advisors) {
             ClassFilter classFilter = advisor.getPointcut().getClassFilter();
             // 过滤匹配类
-            if (!classFilter.matches(bean.getClass())) continue;
+            if (!classFilter.matches(bean.getClass())) {
+                continue;
+            }
 
             AdvisedSupport advisedSupport = new AdvisedSupport();
 
@@ -91,7 +94,7 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
             // 返回代理对象
             Object rtn =  new ProxyFactory(advisedSupport).getProxy();
-            System.out.println("["+bean.getClass()+"]DefaultAdvisorAutoProxyCreator#wrapIfNecessary 返回代理对象："+rtn.getClass());
+            LogUtil.info("[{}]DefaultAdvisorAutoProxyCreator#wrapIfNecessary 返回代理对象：{}", bean.getClass(), rtn.getClass());
             return rtn;
         }
 
