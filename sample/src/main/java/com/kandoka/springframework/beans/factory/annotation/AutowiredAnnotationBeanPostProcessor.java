@@ -8,6 +8,7 @@ import com.kandoka.springframework.beans.factory.BeanFactoryAware;
 import com.kandoka.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import com.kandoka.springframework.util.ClassUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 
@@ -18,6 +19,7 @@ import java.lang.reflect.Field;
  * @Author handong3
  * @Date 2022/4/1 16:50
  */
+@Slf4j
 public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
     private ConfigurableListableBeanFactory beanFactory;

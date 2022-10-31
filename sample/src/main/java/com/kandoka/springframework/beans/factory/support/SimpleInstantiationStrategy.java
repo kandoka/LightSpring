@@ -2,6 +2,7 @@ package com.kandoka.springframework.beans.factory.support;
 
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,11 +12,12 @@ import java.lang.reflect.InvocationTargetException;
  * @Author handong3
  * @Date 2022/2/16 14:31
  */
+@Slf4j
 public class SimpleInstantiationStrategy implements InstantiationStrategy {
 
     @Override
     public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) throws BeansException {
-        System.out.println("["+beanName+"] SimpleInstantiationStrategy.instantiate() 执行");
+        log.info("["+beanName+"] SimpleInstantiationStrategy.instantiate() 执行");
         Class clazz = beanDefinition.getBeanClass();
         try{
             //如果constructor不为空，就是需要有构造函数的实例化

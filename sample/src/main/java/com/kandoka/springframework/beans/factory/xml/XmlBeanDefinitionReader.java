@@ -11,6 +11,7 @@ import com.kandoka.springframework.beans.factory.support.BeanDefinitionRegistry;
 import com.kandoka.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import com.kandoka.springframework.core.io.Resource;
 import com.kandoka.springframework.core.io.ResourceLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -25,6 +26,7 @@ import java.util.List;
  * @Author handong3
  * @Date 2022/2/16 16:21
  */
+@Slf4j
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
@@ -38,7 +40,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     @Override
     public void loadBeanDefinitions(Resource resource) throws BeansException {
-        System.out.println("读取配置资源 " + resource.toString());
+        log.info("读取配置资源 " + resource.toString());
         try {
             try (InputStream inputStream = resource.getInputStream()) {
                 doLoadBeanDefinitions(inputStream);

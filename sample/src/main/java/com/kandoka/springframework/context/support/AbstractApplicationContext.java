@@ -12,6 +12,7 @@ import com.kandoka.springframework.context.event.ContextClosedEvent;
 import com.kandoka.springframework.context.event.ContextRefreshedEvent;
 import com.kandoka.springframework.context.event.SimpleApplicationEventMulticaster;
 import com.kandoka.springframework.core.io.DefaultResourceLoader;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @Author handong3
  * @Date 2022/2/17 15:31
  */
+@Slf4j
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
 
     //事件发布
@@ -33,7 +35,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      */
     @Override
     public void refresh() throws BeansException {
-        System.out.println("AbstractApplicationContext.refresh() 开始");
+        log.info("AbstractApplicationContext.refresh() 开始");
         // 1. 创建 BeanFactory，并加载 BeanDefinition
         refreshBeanFactory();
         // 2. 获取 BeanFactory
@@ -55,7 +57,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         registerListeners();
         //9. 发布容器刷新完成事件
         finishRefresh();
-        System.out.println("AbstractApplicationContext.refresh() 完成");
+        log.info("AbstractApplicationContext.refresh() 完成");
     }
 
     private void finishRefresh(){
@@ -97,14 +99,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      * @throws BeansException
      */
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-        System.out.println("AbstractApplicationContext.invokeBeanFactoryPostProcessors() 开始");
+        log.info("AbstractApplicationContext.invokeBeanFactoryPostProcessors() 开始");
         //获取bean工厂的所有后置处理器
         Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap =
                 beanFactory.getBeansOfType(BeanFactoryPostProcessor.class);
         for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessorMap.values()) {
             beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
         }
-        System.out.println("AbstractApplicationContext.invokeBeanFactoryPostProcessors() 完成");
+        log.info("AbstractApplicationContext.invokeBeanFactoryPostProcessors() 完成");
     }
 
     /**
@@ -112,12 +114,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      * @param beanFactory
      */
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-        System.out.println("AbstractApplicationContext.registerBeanPostProcessors() 开始");
+        log.info("AbstractApplicationContext.registerBeanPostProcessors() 开始");
         Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
         for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
             beanFactory.addBeanPostProcessor(beanPostProcessor);
         }
-        System.out.println("AbstractApplicationContext.registerBeanPostProcessors() 完成");
+        log.info("AbstractApplicationContext.registerBeanPostProcessors() 完成");
     }
 
     @Override
@@ -157,9 +159,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void close() {
-        System.out.println("AbstractApplicationContext.close() 开始");
+        log.info("AbstractApplicationContext.close() 开始");
         publishEvent(new ContextClosedEvent(this));
         getBeanFactory().destroySingletons();
-        System.out.println("AbstractApplicationContext.close() 完成");
+        log.info("AbstractApplicationContext.close() 完成");
     }
 }

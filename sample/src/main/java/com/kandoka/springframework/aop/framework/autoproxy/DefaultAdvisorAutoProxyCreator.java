@@ -10,6 +10,7 @@ import com.kandoka.springframework.beans.factory.BeanFactoryAware;
 import com.kandoka.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import com.kandoka.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.kandoka.springframework.util.LogUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -33,6 +34,7 @@ import java.util.Set;
  * @Author handong3
  * @Date 2022/4/1 11:10
  */
+@Slf4j
 public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
     private DefaultListableBeanFactory beanFactory;
@@ -94,7 +96,7 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
             // 返回代理对象
             Object rtn =  new ProxyFactory(advisedSupport).getProxy();
-            LogUtil.info("[{}]DefaultAdvisorAutoProxyCreator#wrapIfNecessary 返回代理对象：{}", bean.getClass(), rtn.getClass());
+            log.info("[{}]DefaultAdvisorAutoProxyCreator#wrapIfNecessary 返回代理对象：{}", bean.getClass(), rtn.getClass());
             return rtn;
         }
 

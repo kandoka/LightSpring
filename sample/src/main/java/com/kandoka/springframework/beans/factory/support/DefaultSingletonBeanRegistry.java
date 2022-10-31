@@ -4,6 +4,7 @@ import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.DisposableBean;
 import com.kandoka.springframework.beans.factory.ObjectFactory;
 import com.kandoka.springframework.beans.factory.config.SingletonBeanRegistry;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author handong3
  * @Date 2022/2/15 16:24
  */
+@Slf4j
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     /**
@@ -47,32 +49,32 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         Object singletonObject = singletonObjects.get(beanName);
         //判断一级缓存中是否有对象
         if(null == singletonObject){
-            System.out.println("从一级缓存未获取到"+beanName+"，尝试从二级缓存获取的半成品对象");
+            log.info("从一级缓存未获取到"+beanName+"，尝试从二级缓存获取的半成品对象");
             singletonObject = earlySingletonObjects.get(beanName);
             //判断二级缓存中是否有对象。没有的话，这个对象就是代理对象，因为只有代理对象才会放到三级缓存中
             if(null == singletonObject){
-                System.out.println("从二级缓存未获取到"+beanName+"，尝试从三级缓存的代理对象");
+                log.info("从二级缓存未获取到"+beanName+"，尝试从三级缓存的代理对象");
                 ObjectFactory<?> singletonFactory = singletonObjectFactories.get(beanName);
                 if(null != singletonFactory){
-                    System.out.println("从三级级缓存获取到"+beanName+"的代理对象，放入到二级缓存中");
+                    log.info("从三级级缓存获取到"+beanName+"的代理对象，放入到二级缓存中");
                     singletonObject = singletonFactory.getObject();
                     //把三级缓存中的代理对象中的真实对象获取出来，放入到二级缓存中
                     earlySingletonObjects.put(beanName, singletonObject);
                     singletonObjectFactories.remove(beanName);
                 } else {
-                    System.out.println("从三级级缓存未获取"+beanName+"的代理对象");
+                    log.info("从三级级缓存未获取"+beanName+"的代理对象");
                 }
             } else {
-                System.out.println("从二级级缓存获取到"+beanName+"的半成品对象");
+                log.info("从二级级缓存获取到"+beanName+"的半成品对象");
             }
         } else {
-            System.out.println("从一级缓存获取到"+beanName+"的实例对象");
+            log.info("从一级缓存获取到"+beanName+"的实例对象");
         }
         return singletonObject;
     }
 
     public void destroySingletons() {
-        System.out.println("DefaultSingletonBeanRegistry.destroySingletons() 开始");
+        log.info("DefaultSingletonBeanRegistry.destroySingletons() 开始");
         Set<String> keySet = this.disposableBeans.keySet();
         Object[] disposableBeanNames = keySet.toArray();
 
@@ -85,7 +87,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 throw new BeansException("Destroy method on bean with name '" + beanName + "' threw an exception", e);
             }
         }
-        System.out.println("DefaultSingletonBeanRegistry.destroySingletons() 完成");
+        log.info("DefaultSingletonBeanRegistry.destroySingletons() 完成");
     }
 
     /**

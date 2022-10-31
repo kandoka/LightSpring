@@ -3,6 +3,7 @@ package com.kandoka.springframework.beans.factory.support;
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.kandoka.springframework.beans.factory.config.BeanDefinition;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map;
  * @Author handong3
  * @Date 2022/2/15 16:27
  */
+@Slf4j
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
 
     /**
@@ -28,7 +30,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
      */
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
-        System.out.println("DefaultListableBeanFactory.registerBeanDefinition() 执行");
+        log.info("DefaultListableBeanFactory.registerBeanDefinition() 执行");
         beanDefinitionMap.put(beanName, beanDefinition);
     }
 
@@ -75,7 +77,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
      */
     @Override
     public void preInstantiateSingletons() throws BeansException {
-        System.out.println("DefaultListableBeanFactory.preInstantiateSingletons() 执行");
+        log.info("DefaultListableBeanFactory.preInstantiateSingletons() 执行");
         beanDefinitionMap.keySet().forEach(this::getBean);
     }
 

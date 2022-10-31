@@ -4,6 +4,7 @@ import com.kandoka.springframework.aop.ClassFilter;
 import com.kandoka.springframework.aop.MethodMatcher;
 import com.kandoka.springframework.aop.Pointcut;
 import com.kandoka.springframework.util.LogUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.PointcutParser;
 import org.aspectj.weaver.tools.PointcutPrimitive;
@@ -17,6 +18,7 @@ import java.util.Set;
  * @Author handong3
  * @Date 2022/3/31 16:11
  */
+@Slf4j
 public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
 
     private static final Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<PointcutPrimitive>();
@@ -39,7 +41,7 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
      */
     @Override
     public boolean matches(Class<?> clazz) {
-        LogUtil.info("[{}]AspectJExpressionPointcut#matches() 执行匹配类", clazz);
+        log.info("[{}]AspectJExpressionPointcut#matches() 执行匹配类", clazz);
         return pointcutExpression.couldMatchJoinPointsInType(clazz);
     }
 
@@ -51,7 +53,7 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
      */
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
-        LogUtil.info("[{}]AspectJExpressionPointcut#matches() 执行匹配方法：{}", targetClass, method.getName());
+        log.info("[{}]AspectJExpressionPointcut#matches() 执行匹配方法：{}", targetClass, method.getName());
         return pointcutExpression.matchesMethodExecution(method).alwaysMatches();
     }
 

@@ -3,12 +3,14 @@ package com.kandoka.springframework.context.support;
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.kandoka.springframework.beans.factory.support.DefaultListableBeanFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Description 应用上下文的抽象类。实现了获取实例化的DefaultListableBeanFactory
  * @Author handong3
  * @Date 2022/2/17 15:32
  */
+@Slf4j
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext{
 
     private DefaultListableBeanFactory beanFactory;
@@ -27,11 +29,11 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
      */
     @Override
     protected void refreshBeanFactory() throws BeansException {
-        System.out.println("AbstractRefreshableApplicationContext.refreshBeanFactory() 开始");
+        log.info("AbstractRefreshableApplicationContext.refreshBeanFactory() 开始");
         DefaultListableBeanFactory beanFactory = createBeanFactory();
         loadBeanDefinitions(beanFactory);
         this.beanFactory = beanFactory;
-        System.out.println("AbstractRefreshableApplicationContext.refreshBeanFactory() 完成");
+        log.info("AbstractRefreshableApplicationContext.refreshBeanFactory() 完成");
     }
 
     /**

@@ -6,7 +6,9 @@ import com.kandoka.springframework.beans.factory.config.BeanDefinition;
 import com.kandoka.springframework.beans.factory.config.BeanPostProcessor;
 import com.kandoka.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.kandoka.springframework.util.ClassUtils;
+import com.kandoka.springframework.util.LogUtil;
 import com.kandoka.springframework.util.StringValueResolver;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
  * @Author handong3
  * @Date 2022/2/15 16:23
  */
+@Slf4j
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     /** ClassLoader to resolve bean class names with, if necessary */
@@ -80,7 +83,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
      * @return
      */
     protected <T> T doGetBean(final String name, final Object[] args) {
-        System.out.println("["+name+"] AbstractBeanFactory.doGetBean() 开始");
+        log.info("[{}] AbstractBeanFactory.doGetBean() 开始", name);
         Object sharedInstance = getSingleton(name);
         if (sharedInstance != null) {
             // 如果是 FactoryBean，则需要调用 FactoryBean#getObject
@@ -89,7 +92,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
         BeanDefinition beanDefinition = getBeanDefinition(name);
         Object bean = createBean(name, beanDefinition, args);
-        System.out.println("["+name+"] AbstractBeanFactory.doGetBean() 完成");
+        log.info("[{}] AbstractBeanFactory.doGetBean() 完成", name);
         return (T) getObjectForBeanInstance(bean, name);
     }
 

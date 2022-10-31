@@ -4,6 +4,7 @@ import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.config.BeanPostProcessor;
 import com.kandoka.springframework.context.ApplicationContext;
 import com.kandoka.springframework.context.ApplicationContextAware;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Description 包装处理器，用于获取ApplicationContext的实例
@@ -14,6 +15,7 @@ import com.kandoka.springframework.context.ApplicationContextAware;
  * @Author handong3
  * @Date 2022/2/24 14:51
  */
+@Slf4j
 public class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
     private final ApplicationContext applicationContext;
@@ -32,7 +34,7 @@ public class ApplicationContextAwareProcessor implements BeanPostProcessor {
      */
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("["+beanName+"] ApplicationContextAwareProcessor." +
+        log.info("["+beanName+"] ApplicationContextAwareProcessor." +
                 "postProcessBeforeInitialization() 执行");
         if(bean instanceof ApplicationContextAware){
             ((ApplicationContextAware) bean).setApplicationContext(applicationContext);
@@ -42,7 +44,7 @@ public class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("["+beanName+"] ApplicationContextAwareProcessor." +
+        log.info("["+beanName+"] ApplicationContextAwareProcessor." +
                 "postProcessAfterInitialization() 执行");
         return bean;
     }
