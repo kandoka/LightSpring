@@ -2,6 +2,7 @@ package com.kandoka.springframework.beans.factory.support;
 
 import com.kandoka.springframework.beans.BeansException;
 import com.kandoka.springframework.beans.factory.FactoryBean;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author handong3
  * @Date 2022/2/24 15:54
  */
+@Slf4j
 public class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry{
     /**
      * Cache of singleton objects created by FactoryBeans: FactoryBean name --> object
@@ -20,6 +22,7 @@ public class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry{
 
     protected Object getCachedObjectForFactoryBean(String beanName) {
         Object object = this.factoryBeanObjectCache.get(beanName);
+        log.info("【FactoryBean】获取, 从缓存获取，Bean类名：{}", object.getClass().getName());
         return (object != NULL_OBJECT ? object : null);
     }
 
@@ -33,12 +36,15 @@ public class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry{
      */
     protected Object getObjectFromFactoryBean(FactoryBean factory, String beanName)
     {
+        log.info("【FactoryBean】开始获取，Bean名称：{}, FactoryBean类名：{}", beanName, factory.getClass().getName());
         if (factory.isSingleton()) {
             Object object = this.factoryBeanObjectCache.get(beanName);
             if (object == null) {
                 object = doGetObjectFromFactoryBean(factory, beanName);
                 this.factoryBeanObjectCache.put(beanName, (object != null ? object
                         : NULL_OBJECT));
+            } else {
+                log.info("【FactoryBean】完成获取, 从缓存获取，Bean类名：{}", object.getClass().getName());
             }
             return (object != NULL_OBJECT ? object : null);
         } else {
@@ -48,7 +54,9 @@ public class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry{
 
     private Object doGetObjectFromFactoryBean(final FactoryBean factory, final String beanName){
         try {
-            return factory.getObject();
+            Object o = factory.getObject();
+            log.info("【FactoryBean】完成获取, 从FactoryBean获取，Bean类名：{}", o.getClass().getName());
+            return o;
         } catch (Exception e) {
             throw new BeansException("FactoryBean threw exception on object[" + beanName + "] creation", e);
         }

@@ -46,30 +46,32 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
      */
     @Override
     public Object getSingleton(String beanName) {
+        log.info("[{}] getSingleton开始", beanName);
         Object singletonObject = singletonObjects.get(beanName);
         //判断一级缓存中是否有对象
         if(null == singletonObject){
-            log.info("从一级缓存未获取到"+beanName+"，尝试从二级缓存获取的半成品对象");
+            log.info("从第一级缓存未获取到"+beanName+"，尝试从二级缓存获取的半成品对象");
             singletonObject = earlySingletonObjects.get(beanName);
             //判断二级缓存中是否有对象。没有的话，这个对象就是代理对象，因为只有代理对象才会放到三级缓存中
             if(null == singletonObject){
-                log.info("从二级缓存未获取到"+beanName+"，尝试从三级缓存的代理对象");
+                log.info("从第二级缓存未获取到"+beanName+"，尝试从三级缓存的代理对象");
                 ObjectFactory<?> singletonFactory = singletonObjectFactories.get(beanName);
                 if(null != singletonFactory){
-                    log.info("从三级级缓存获取到"+beanName+"的代理对象，放入到二级缓存中");
+                    log.info("从第三级级缓存获取到"+beanName+"的代理对象，放入到二级缓存中");
                     singletonObject = singletonFactory.getObject();
                     //把三级缓存中的代理对象中的真实对象获取出来，放入到二级缓存中
                     earlySingletonObjects.put(beanName, singletonObject);
                     singletonObjectFactories.remove(beanName);
                 } else {
-                    log.info("从三级级缓存未获取"+beanName+"的代理对象");
+                    log.info("从第三级级缓存未获取"+beanName+"的代理对象");
                 }
             } else {
-                log.info("从二级级缓存获取到"+beanName+"的半成品对象");
+                log.info("从第二级级缓存获取到"+beanName+"的半成品对象");
             }
         } else {
-            log.info("从一级缓存获取到"+beanName+"的实例对象");
+            log.info("从第一级缓存获取到"+beanName+"的实例对象");
         }
+        log.info("[{}] getSingleton完成，引用地址：{}", beanName, singletonObject);
         return singletonObject;
     }
 
