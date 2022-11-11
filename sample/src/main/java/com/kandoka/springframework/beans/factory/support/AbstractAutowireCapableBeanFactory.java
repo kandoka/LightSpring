@@ -277,7 +277,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @return
      */
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
-        log.info("[" + beanName + "] AbstractAutowireCapableBeanFactory.initializeBean() 开始");
+        log.info("[" + beanName + "] initializeBean() 开始");
         //处理实现感知的bean，将对应的资源放入bean实例中
         if(bean instanceof Aware){
             //让bean获取BeanFactory实例
@@ -307,7 +307,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         // 2. 执行 BeanPostProcessor After 处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
-        log.info("[" + beanName + "] AbstractAutowireCapableBeanFactory.initializeBean() 完成");
+        log.info("[" + beanName + "] initializeBean() 完成");
         return wrappedBean;
     }
 
@@ -318,7 +318,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      */
     private void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
-        log.info("[" + beanName + "] AbstractAutowireCapableBeanFactory.invokeInitMethods() 执行");
+        log.info("[" + beanName + "] invokeInitMethods() 执行");
         //1.调用实现了接口InitializingBean的afterPropertySet方法
         if(bean instanceof InitializingBean) {
             ((InitializingBean) bean).afterPropertiesSet();
@@ -351,6 +351,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         for (BeanPostProcessor processor : getBeanPostProcessors()) {
             Object current = processor.postProcessBeforeInitialization(result, beanName);
             if (null == current) {
+                log.info("[" + beanName + "] applyBeanPostProcessorsBeforeInitialization 完成");
                 return result;
             }
             result = current;
